@@ -59,7 +59,7 @@ public class ContactController {
      */
     @GetMapping("pagination/{offset}/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Contact>> getContacts(@PathVariable int offset, @PathVariable int pageSize) {
+    public ResponseEntity<List<Contact>> getContacts(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize) {
         logger.info("Get list contact with offset: {}, pageSize: {} ", offset, pageSize);
         Page<ContactEntity> contacts = contactService.getContactsList(offset, pageSize);
         logger.info("list contact object query: {} ", contactService.toString());
@@ -80,7 +80,7 @@ public class ContactController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Contact>> searchByName(@RequestParam String name) {
+    public ResponseEntity<List<Contact>> searchByName(@RequestParam("name") String name) {
         logger.info("search all contact with name: {}", name);
         List<ContactEntity> contacts = contactService.searchByName(name);
         logger.info("total contact search result with name: {}", contacts.size());
@@ -101,7 +101,7 @@ public class ContactController {
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Contact> getContactById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<Contact> getContactById(@PathVariable("id") int id) throws EntityNotFoundException {
         ContactEntity contactEntity = contactService.getContactById(id);
         logger.info("Get contact by ID: {} result: {}", id, contactEntity);
         return new ResponseEntity<>(contactMapper.convertToDto(contactEntity),HttpStatus.OK);
@@ -138,9 +138,9 @@ public class ContactController {
      */
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ContactEntity> updateContact(@PathVariable int id, @RequestBody @Valid Contact contact)
+    public ResponseEntity<ContactEntity> updateContact(@PathVariable("id") int id, @RequestBody @Valid Contact contact)
             throws EntityNotFoundException, UnmatchIDException {
-        if (id != contact.getId()) {
+        if (contact.getId() != 0 && id != contact.getId()) {
             logger.error("ID in URL and Body don't match");
             throw new UnmatchIDException("ID in URL and Body don't match");
         }
@@ -160,7 +160,7 @@ public class ContactController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteContact(@PathVariable int id) {
+    public void deleteContact(@PathVariable("id") int id) {
         logger.info("delete contact with id : {}", id);
         contactService.deleteContact(id);
         logger.info("delete contact successfully with id : {}", id);
