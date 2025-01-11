@@ -45,14 +45,14 @@ public class ContactServiceTest {
         listContact = Stream.of(contact,contact2).collect(Collectors.toList());
     }
     @Test
-    void getAllContactsTest() {
+    void getAllContactsTest_Success() {
         when(contactRepo.findAll())
                 .thenReturn(listContact);
         assertEquals(2, contactService.getAllContacts().size());
     }
 
     @Test
-    void getContactsListTest() {
+    void getContactsListTest_Pagination_Success() {
         PageRequest pageReq = PageRequest.of(0, 1);
         Page<ContactEntity> contactPage = new PageImpl<>(listContact, pageReq, listContact.size());
         when(contactRepo.findAll(any(PageRequest.class))).thenReturn(contactPage);
@@ -60,19 +60,19 @@ public class ContactServiceTest {
     }
 
     @Test
-    void createContactTest() {
+    void createContactTest_Success() {
         when(contactRepo.save(any(ContactEntity.class))).thenReturn(contact);
         assertEquals("contact Name 1", contactService.createContact(contact).getName());
     }
 
     @Test
-    void getContactByIdTest() throws EntityNotFoundException {
+    void getContactByIdTest_Success() throws EntityNotFoundException {
 		when(contactRepo.findById(any(Integer.class))).thenReturn(Optional.of(contact));
 		assertEquals("contact1@gmail.com", contactService.getContactById(0).getEmail());
 	}
 
     @Test
-    void getContactByIdTestThrowException() throws EntityNotFoundException {
+    void getContactByIdTest_ThrowException() throws EntityNotFoundException {
 		when(contactRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(null));
         
 	}
@@ -84,12 +84,12 @@ public class ContactServiceTest {
 	}
 
     @Test
-    void updateContactTestThrowException() throws EntityNotFoundException {
+    void updateContactTest_ThrowException() throws EntityNotFoundException {
 		when(contactRepo.findById(any(Integer.class))).thenThrow(new ObjectOptimisticLockingFailureException("1","1"));
 	}
 
     @Test
-    void searchByNameTest() throws EntityNotFoundException {
+    void searchByNameTest_Success() throws EntityNotFoundException {
 		when(contactRepo.findByName(any(String.class))).thenReturn(listContact);
 		assertEquals(2, listContact.size());
 	}

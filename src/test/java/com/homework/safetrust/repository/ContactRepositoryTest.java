@@ -24,7 +24,7 @@ public class ContactRepositoryTest {
     TestEntityManager entityManager;
 
     @Test
-    void givenCampaignCreated_whenFindById_thenSuccess() {
+    void findByName_whenFindByName_thenSuccess() {
         ContactEntity newContact = new ContactEntity();
         newContact.setName("name");
         newContact.setEmail("contact3@gmail.com");

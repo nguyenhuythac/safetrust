@@ -61,7 +61,7 @@ public class ContactControllerTest {
     }
 
     @Test
-    void getContactsSuccessCaseTest() throws Exception {
+    void getContacts_SuccessCaseTest() throws Exception {
         PageRequest pageReq = PageRequest.of(0, 1);
         Page<ContactEntity> contactPage = new PageImpl<>(listContact, pageReq, listContact.size());
         when(contactService.getContactsList(anyInt(), anyInt())).thenReturn(contactPage);
@@ -70,7 +70,7 @@ public class ContactControllerTest {
     }
 
     @Test
-    void searchByNameSuccessCaseTest() throws Exception {
+    void searchByName_SuccessCaseTest() throws Exception {
         when(contactService.searchByName(anyString())).thenReturn(listContact);
         ResultActions response =this.mockMvc.perform(get("/contact/search?name=contact").contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(listContact)));
@@ -78,14 +78,14 @@ public class ContactControllerTest {
     }
 
     @Test
-    void getContactByIdSuccessCaseTest() throws Exception {
+    void getContactById_SuccessCaseTest() throws Exception {
         when(contactService.getContactById(anyInt())).thenReturn(contact);
         this.mockMvc.perform(get("/contact/1").contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(contact))).andExpect(status().isOk());
     }
 
     @Test
-    void createContactSuccessCaseTest() throws Exception {
+    void createContact_SuccessCaseTest() throws Exception {
         ContactEntity newContact = new ContactEntity();
         newContact.setName("contact Name new");
         newContact.setEmail("contact3@gmail.com");
@@ -97,14 +97,14 @@ public class ContactControllerTest {
     }
 
     @Test
-    void updateContactSuccessCaseTest() throws Exception {
+    void updateContact_SuccessCaseTest() throws Exception {
         when(contactService.updateContact(any(ContactEntity.class))).thenReturn(contact);
         this.mockMvc.perform(put("/contact/1").contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(contact))).andExpect(status().isOk());
     }
 
     @Test
-    void updateContactThrowUnmatchIDExceptionTest() throws Exception {
+    void updateContact_ThrowUnmatchIDExceptionTest() throws Exception {
         when(contactService.updateContact(any(ContactEntity.class))).thenReturn(contact);
         this.mockMvc.perform(put("/contact/2")).andExpect(status().isBadRequest());
     }
